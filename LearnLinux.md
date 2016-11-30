@@ -1,12 +1,17 @@
 #### 原创
+
+##一些常用快捷键c(ctrl)
+	1. c + l 清屏
+	2. c + c 终止程序
+	3. 
 ##历史命令切换: histroly
-	1.向上切换 c + p
-	2.向下 c + n
+	1. 向上切换 c + p
+	2. 向下 c + n
 ##  光标移动:
-	1.向左:c + b
-	2.右 c + f
-	3.行首 c + a
-	4 行尾 + e
+	1. 向左:c + b
+	2. 右 c + f
+	3. 行首 c + a
+	4. 行尾 + e
 ## 根目录
 	1. bin 存放我们常用的命令
 	2. boot 开启启动linux的一些核心文件.包括连接文件和一些镜像文件
@@ -30,9 +35,10 @@
 	cd ../ 到上一级目录
 	cd ~ 进入 当前用户的家目录
 	
-## 用户切换
+## 用户操作
 	1. sudo su 切换到超级用户
-	2. 
+	2. sudo su zzw 切换zzw用户
+	3. sudo 其他用户暂时借用管理员权限(第一次需要输入当前用户的密码)
 ## 下载软件
 	1. sudo apt-get install tree 下载
 	2. sudo aptitude show tree 显示是否下载了
@@ -84,10 +90,11 @@
 		4. du -h 查看当前目录的大小
 		5. df -h 提示磁盘的使用情况
 	13. which(外部命令) 命令解析器 查看命令所在的目录
+
 #which 命令
 	1. which ls  可以显示是在哪个目录找到了这个命令(命令可以理解为一个应用)
 	2. which cd 没有显示  cd命令是linux的内嵌命令 不是外部的
-# 修改文件的权限
+# 修改文件的权限以及文件所属的组
 	1. whoami 查看当前用户
 	2. 修改文件权限
 		1. 文字设定法 : chmod [who] [+|-|=] {mode}
@@ -99,4 +106,36 @@
 			2. r:4  w:2  x:1   (相加来作为who的权限) w+x:3  rwx:7 rx:5
 			3. 765: 7:文件所有者 6:同组  5:其他
 			
-	3. 
+	3. 修改文件的组
+		1. chown john temp  把temp的所有权给john
+		2. chgrp zzw temp 改变文件所属的组
+		
+	4. 目录必须要有执行(x) 的权限,否则无法查看目录的信息
+##查找和检索文件
+	1. 按文件属性进行查找:
+		1. 文件名: find 查找的目录 -name +"文件的名字"(要用引号括起来)
+		   通配符    *:一个或多个字符
+					?:一个字符
+					
+		2. 文件大小: find 查找目录 -size +  +10k(大于10k) -10M(小于10M)
+								 -size +10k -size -50k(大于10k小于50k)
+		3. 文件类型: find 查找目录 -type 
+	2. 按文件内容进行查找
+		1. grep -r "查找的内容" 查找的路径 
+##软件的安装和卸载
+	1. 在线安装
+		1.  sudo apt-get install tree(在线安装)
+		2.  sudo apt-get remove tree(删除)
+		3.  sudo apt-get update(更新软件列表(软件的名字和下载地址))
+		4.  sudo apt-get clean (清理所有软件的安装包)
+	2. deb包安装
+		1.	sudo dpkg -i xxx.deb(安装)
+		2.	sudo dpkg -r xxx(卸载)
+	3. 源码安装
+		1. 解压源代码包
+		2. 进入安装目录 cd dir
+		3. 检测文件是否缺失,创建makefile ,检测编译环境: ./configure(可执行文件,要有执行权限) 执行它
+		4. 编译源码,生成库和可执行程序: make 命令
+		5. 把库和可执行程序 ,安装到系统目录下: sudo make install
+		6. 删除和卸载软件: sudo make distclean
+		7. 应该先看readMe文件(有过程)
