@@ -35,25 +35,44 @@
 	cd ../ 到上一级目录
 	cd ~ 进入 当前用户的家目录
 	
-## 用户操作
-	1. sudo su 切换到超级用户
-	2. sudo su zzw 切换zzw用户
-	3. sudo 其他用户暂时借用管理员权限(第一次需要输入当前用户的密码)
+## 用户管理操作
+	1. sudo命令
+		1. sudo su 切换到超级用户
+		2. sudo su zzw 切换zzw用户
+		3. sudo 其他用户暂时借用管理员权限(第一次需要输入当前用户的密码)
+	2. 添加用户
+		1. sudo adduser name(必须是小写的) 添加用户
+		2. sudo useradd -s /bin/bash -g Robin -d /home/Robin -m Robin
+	3. 给用户修改密码(新用户添加密码)
+		1. sudo passwd Robin
+		2. sudo passwd root 给超级管理员修改密码
+	4. 删除用户:
+		1. sudo deluser Robin (但是还需要手动删除/home/Robin)
+		2. sudo userdel -r Robin (自动删除home目录下文件)
+	5. 添加一个用户组
+		1. sudo addgroup Robin (小写)
+		2. sudo groupadd Robin
+	6. 切换用户 
+		1.  su命令 su+ name 切换用户 默认切换root
+	7. 查看当前系统下存放的用户(etc/passwd文件每一行对应一个用户)
+		1. etc/passwd 文件中查看是否存在创建的用户
 ## 下载软件
 	1. sudo apt-get install tree 下载
 	2. sudo aptitude show tree 显示是否下载了
 
 ## 文件颜色
-	1. 白色 普通文件
-	2. 蓝色 目录
-	3. 绿色 可执行文件
-	4. 红色 压缩文件
+	1. 白色 普通文件  
+	2. 蓝色 目录    
+	3. 绿色 可执行文件  
+	4. 红色 压缩文件   
 	5. 青色 链接文件 (快捷方式)
 	6. 灰色 其他文件
 	7. 黄色 设备文件
+	8. 文件类型:
+		1. -普通文件 d目录 I链接文件 b块设备 c字符设备 s:Socket文件 p管道
 	
 ## 目录和文件相关
-	1. ls -a 所有文件  .XX 指的是隐藏文件
+	1. ls -a 所有文件  .XX 指的是隐藏文件   -r:同时列出所有子目录层(tree)
 	2. ls -l 列出文件的详细信息
 		前边有10个字符
 		第一个指的是文件的类型 
@@ -111,7 +130,7 @@
 		2. chgrp zzw temp 改变文件所属的组
 		
 	4. 目录必须要有执行(x) 的权限,否则无法查看目录的信息
-##查找和检索文件
+#查找和检索文件
 	1. 按文件属性进行查找:
 		1. 文件名: find 查找的目录 -name +"文件的名字"(要用引号括起来)
 		   通配符    *:一个或多个字符
@@ -139,3 +158,112 @@
 		5. 把库和可执行程序 ,安装到系统目录下: sudo make install
 		6. 删除和卸载软件: sudo make distclean
 		7. 应该先看readMe文件(有过程)
+##基本概念
+	1. shell 和 bash 都是命令解析器(unix 和 linux)同一个人写的
+
+##压缩包管理
+	1. 屌丝版:
+		1. gzip --.gz格式的压缩包
+			1. gzip *.txt   把当前目录所有的txt打包,并且不保存原文件.(但是不能压缩目录)
+			2. gunzip *.gz 把当前目录的所有gz解压.
+		2. bzip2 --.bz2格式
+			1.	bzip2 *.txt 和gzip一样
+			2.	bunzip2 .bz2 和 gzip一样
+		3. 差异: bzip2 -k *.txt 可以保存原文件
+	2. 高富帅版:
+		1. .tar
+			1. 参数:
+				1. c--创建 -- 压缩
+				2. x--释放 --解压缩
+				3. v--显示提示信息 --压缩解压缩 --可以省略
+				4. f -- 指定压缩文件的名字
+				5. z-- 使用gzip的方式进行压缩文件 --gz
+				6. j-- 使用bizp2的方式压缩文件 -- .bz2
+			2. 压缩:
+				1. tar zcvf 生成的压缩包的名字(xxx.tar.gz) 要压缩的文件或目录
+				2. tar jcvf 生成的压缩包的名字(xxx.tar.bz2) 要压缩的文件或目录
+			3. 解压
+				1. tar zxvf 要解压的压缩包的名字(并且会将其解压到当前目录)
+				2. tar jxvf 要解压的压缩包的名字(一样)
+				3. tar zxvf 压缩包 -C 解压到的目录
+		2. .rar(用户必须手动安装该软件)
+			1. 参数:
+				1. 压缩:   a
+				2. 解压缩: x
+			2. 压缩:
+				1. rar a 生成的压缩文件的名字 压缩的文件或目录
+			3. 解压缩:
+				1. rar x 压缩的文件名 [可添加目录,不添加默认当前目录]
+				2. rar 
+		3. .zip;
+			1. 参数
+				1. 压缩目录一定要加-r
+			2. 压缩
+				1. zip 压缩包的名字 要压缩的文件
+				2. zip -r 压缩包的名字 要压缩的目录 (递归压缩目录)
+			3. 解压缩
+				1. unzip 压缩包的名字 
+				2. unzip 压缩包的名字 -d 指定的目录
+##进程管理
+	1. ps
+		1. ps -a 查看当前的所有用户信息
+		2. ps -au 查看的更详细
+		3. ps -aux 查看不依赖于终端的进程(进程特别多)
+	2. kill -SIGKILL + pid  杀死该进程  (也可以用kill -9 + pid)kill -l 查看信号序列
+	3. 查看当前进程的环境变量(env):
+		1. Linux下的环境格式: key-value(可以有多个value-->key-value:value:value)
+	4.top命令 (和windows的任务管理器类似但是只能看不能进行操作)
+
+##管道(|)
+	1. 什么是管道
+		1. 管道就是  指令1 | 指令2  指令1的输出作为指令2的输入,指令2处理完毕将信息输出到屏幕
+		2. ps -aux|grep bash 查找前面输出的内容里边有没有bash
+		
+		4. 
+##网路管理
+	1. ifconfig 查看本机的ip地址
+	2. ping 测试两台主机之间能否进行通信
+		1. ping + ip 地址 进行信息回馈
+		2. ping + ip + -c 4  进行 4次回馈
+		3. ping www.baidu.con 可以测试能否上网
+		4. ping 域名 都会有回馈
+	3. mslookup 可以得到域名对应的ip  nslookup www.baidu.com
+##ftp服务器搭建 --vsftpd(ftp服务器)-->自带服务端和客户端
+		ftp服务器作用:文件的上传和下载
+	1.  服务器端
+		1.  修改配置文件
+			1.  /etc/vsftpd.config
+		2.  重启服务
+			1.  sudo service vsftpd restart
+	2.  客户端
+		1.  实名用户登录
+			1.  ftp + ip地址 进入
+			2.  文件的上传 put file(登录ftp服务器时在那个目录登的,就选择其中的文件)
+			3.  文件的下载 get file
+		2.  匿名用户登录
+			1.  ftp + serverIp  账号输入:anonymous 密码直接回车
+			2.  不允许匿名用户在任意目录切换,只能在一个指定的范围内工作(需要在server端创
+			建一个匿名用户登录的目录)创建目录后修改配置文件的anno_root=目录路径 然后重启
+             服务
+		3. 退出:  bye quit exit
+		4.  lftp客户端访问ftp服务器 (这是一种客户端需要额外安装)
+			1.  lftp + serverip  然后 login 进入
+			2.  lpwd 可以查看登录之前所在的目录
+			3.  lcd 可以切换 本地目录
+			4.  上传文件 put file  
+			5.  上传多个文件 mput *.txt 
+			6.  上传目录 mirror 目录名
+##nfs服务器搭建( nfs-kernel-server)
+	1. 服务端
+		1. 简介 : 网络文件系统,允许网络中的计算机之间通过TCP/IP网络共享资源.
+		2. 创建一个共享目录
+			1. mkdir 目录
+		3. 修改配置文件 
+			1. /etc/exports
+		4. 重启服务
+			1. sudo service nfs-kernel-server restart
+	2. 客户端:
+		1.  连接服务器共享目录
+##ssh服务器
+##scp命令
+##关机重启
